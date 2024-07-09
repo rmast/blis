@@ -1,3 +1,18 @@
+
+#include <stdio.h>
+#include <complex.h>
+
+/* Function to print a matrix */
+void print_matrix(char *name, double complex *mat, int rows, int cols, int ld) {
+    printf("Matrix %s:\n", name);
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf(" (%f, %f)", creal(mat[i + j * ld]), cimag(mat[i + j * ld]));
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
 /* zblat3.f -- translated by f2c (version 20100827).
    You must link the resulting object file with libf2c:
 	on Microsoft Windows system, link with libf2c.lib;
@@ -840,7 +855,12 @@ L230:
 	    doublecomplex *, integer *, doublecomplex *, doublecomplex *,
 	    integer *, doublecomplex *, doublereal *, doublecomplex *,
 	    integer *, doublereal *, doublereal *, logical *, integer *,
-	    logical *, ftnlen, ftnlen), zgemm_(char *, char *, integer *,
+
+        // Print matrices A, B, and C before the ZGEMM call
+        print_matrix("A", A, m, k, lda);
+        print_matrix("B", B, k, n, ldb);
+        print_matrix("C", C, m, n, ldc);
+        	    logical *, ftnlen, ftnlen), zgemm_(char *, char *, integer *,
 	    integer *, integer *, doublecomplex *, doublecomplex *, integer *,
 	     doublecomplex *, integer *, doublecomplex *, doublecomplex *,
 	    integer *, ftnlen, ftnlen);
