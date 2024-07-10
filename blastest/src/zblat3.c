@@ -12,11 +12,6 @@
 
 #include "f2c.h"
 
-
-#include "test.hh"
-
-
-
 #include <stdio.h>
 
 void print_matrix(char trans, char *name, doublecomplex *mat, int rows, int cols, int ld) {
