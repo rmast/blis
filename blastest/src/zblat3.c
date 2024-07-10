@@ -19,15 +19,21 @@
 
 #include <stdio.h>
 
-void print_matrix(FILE *file, char *name, doublecomplex *mat, int rows, int cols, int ld) {
-    fprintf(file, "Matrix %s:\n", name);
+void print_matrix(char trans, char *name, doublecomplex *mat, int rows, int cols, int ld) {
+    if (trans == 'T' || trans == 't')
+    {
+        int tmp = rows;
+	rows = cols;
+	cols = tmp;
+    }
+    printf("Matrix %s:\n", name);
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            fprintf(file, " (%f, %f)", mat[i + j * ld].r, mat[i + j * ld].i);
+            printf(" (%f, %f)", mat[i + j * ld].r, mat[i + j * ld].i);
         }
-        fprintf(file, "\n");
+        printf("\n");
     }
-    fprintf(file, "\n");
+    printf("\n");
 }
 
 /* Common Block Declarations */
@@ -1105,11 +1111,6 @@ L230:
 				    f_rew(&al__1);
 				}
 
-                                printmatrix(A, lda ,n,n,(char *)"A");
-
-    				print_matrix(ft,"A", &aa[1], m, k, lda);
-    				print_matrix(o__1,"B", &bb[1], k, n, ldb);
-   				print_matrix(o__1,"C", &cc[1], m, n, ldc);
 				zgemm_(transa, transb, &m, &n, &k, &alpha, &
 					aa[1], &lda, &bb[1], &ldb, &beta, &cc[
 					1], &ldc, (ftnlen)1, (ftnlen)1);
@@ -1185,6 +1186,15 @@ L230:
 /*                             If got really bad answer, report and */
 /*                             return. */
 				    if (*fatal) {
+					printf("alpha: (%f,%f)\n", alpha.r, alpha.i);
+					printf("beta: (%f,%f)\n", beta.r, beta.i);
+					printf("m,n,k: %d,%d,%d\n", m, n, k);
+					printf("lda,ldb,ldc: %d,%d,%d\n", lda, ldb, ldc);
+					printf("transa,transb: %c,%c\n", *transa, *transb);
+	    				print_matrix(*transa, "A", &aa[1], m, k, lda);
+	    				print_matrix(*transb, "B", &bb[1], k, n, ldb);
+	   				print_matrix('N', "C before", &cs[1], m, n, ldcs);
+	   				print_matrix('N', "C", &cc[1], m, n, ldc);
 					goto L120;
 				    }
 				}
